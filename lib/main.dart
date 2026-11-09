@@ -187,7 +187,14 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 18),
                     FilledButton(
                       style: FilledButton.styleFrom(backgroundColor: accent, foregroundColor: pageBg),
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => MovieDetailsScreen(movie: movies[0]))),
+                      onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const MovieCatalogScreen(),
+                            ),
+                          );
+                        },
                       child: const Text('Explore movies'),
                     ),
                   ]),
@@ -218,6 +225,43 @@ class HomeScreen extends StatelessWidget {
         ],
       );
     });
+  }
+}
+
+class MovieCatalogScreen extends StatelessWidget {
+  const MovieCatalogScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Explore Movies'),
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final columns = constraints.maxWidth >= 1050
+              ? 4
+              : constraints.maxWidth >= 760
+                  ? 3
+                  : 2;
+
+          return GridView.builder(
+            padding: const EdgeInsets.all(20),
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columns,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 18,
+              childAspectRatio: 0.67,
+            ),
+            itemCount: movies.length,
+            itemBuilder: (context, index) {
+              return MovieCard(movie: movies[index]);
+            },
+          );
+        },
+      ),
+    );
   }
 }
 
